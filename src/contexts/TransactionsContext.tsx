@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useEffect, useState } from 'react'
-import { getTransactions } from '../storage/storage'
+import { getTransactions, saveTransaction } from '../storage/storage'
 
 interface ITransaction {
   id: string
@@ -7,7 +7,7 @@ interface ITransaction {
   type: 'income' | 'outcome'
   price: number
   category: string
-  createdAt: Date
+  createdAt: string
 }
 
 interface TransactionsContextType {
@@ -30,6 +30,15 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
   }
 
   useEffect(() => {
+    saveTransaction({
+      id: crypto.randomUUID(),
+      category: 'Alimentação',
+      description: 'Clássico dos clássicos',
+      type: 'outcome',
+      price: 50,
+      createdAt: String(new Date()),
+    })
+
     loadTransactions()
   }, [])
 

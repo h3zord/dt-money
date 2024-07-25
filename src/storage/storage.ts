@@ -4,7 +4,7 @@ interface ITransaction {
   type: 'income' | 'outcome'
   price: number
   category: string
-  createdAt: Date
+  createdAt: string
 }
 
 const TRANSACTIONS = 'transactions'
