@@ -7,26 +7,24 @@ interface ITransaction {
   createdAt: Date
 }
 
-const TRANSACTION = 'TRANSACTION'
+const TRANSACTIONS = 'transactions'
 
 export function getTransactions() {
-  const data = localStorage.getItem(TRANSACTION)
-
-  console.log(data)
+  const data = localStorage.getItem(TRANSACTIONS)
 
   if (data) {
-    const transactions = JSON.parse(data) as ITransaction[]
+    const transactionList = JSON.parse(data) as ITransaction[]
 
-    return transactions
+    return transactionList
   } else {
     return []
   }
 }
 
-export function saveTransactions(data: ITransaction) {
-  const transactions = getTransactions()
+export function saveTransaction(data: ITransaction) {
+  const transactionList = getTransactions()
 
-  transactions.push({
+  transactionList.push({
     id: data.id,
     description: data.description,
     type: data.type,
@@ -35,7 +33,7 @@ export function saveTransactions(data: ITransaction) {
     createdAt: data.createdAt,
   })
 
-  localStorage.setItem(TRANSACTION, JSON.stringify(transactions))
+  localStorage.setItem(TRANSACTIONS, JSON.stringify(transactionList))
 
-  return transactions
+  return transactionList
 }
