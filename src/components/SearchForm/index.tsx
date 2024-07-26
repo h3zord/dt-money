@@ -18,6 +18,7 @@ function SearchFormComponent() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { isSubmitting },
   } = useForm<SearchFormInputs>({
     resolver: zodResolver(searchFormSchema),
@@ -25,6 +26,8 @@ function SearchFormComponent() {
 
   async function handleSearchTransactions(data: SearchFormInputs) {
     loadTransactions(data.query)
+
+    reset()
   }
 
   return (

@@ -5,23 +5,25 @@ import {
   useEffect,
   useState,
 } from 'react'
+import { transactionExampleList } from '../utils/transactionExampleList'
 
-interface ISaveTransaction {
+interface SaveTransaction {
   description: string
   type: 'income' | 'outcome'
   price: number
   category: string
 }
 
-interface ITransaction extends ISaveTransaction {
+interface Transaction extends SaveTransaction {
   id: string
   createdAt: string
 }
 
 interface TransactionsContextType {
-  transactions: ITransaction[]
-  saveTransactionToStorage: (data: ISaveTransaction) => void
-  loadTransactions: (query?: string) => void
+  transactions: Transaction[]
+  saveTransactionToStorage: (data: SaveTransaction) => void
+  deleteTransactionFromStorage: (idToDelete: string) => void
+  loadTransactions: (query?: string) => Transaction[]
 }
 
 interface TransactionsProviderProps {
@@ -31,7 +33,7 @@ interface TransactionsProviderProps {
 export const TransactionsContext = createContext({} as TransactionsContextType)
 
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
-  const [transactions, setTransactions] = useState<ITransaction[]>([])
+  const [transactions, setTransactions] = useState<Transaction[]>([])
 
   const TRANSACTIONS = 'transactions'
 
@@ -40,7 +42,7 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
 
     if (!data) return []
 
-    const transactionList = JSON.parse(data) as ITransaction[]
+    const transactionList = JSON.parse(data) as Transaction[]
 
     if (query) {
       const filteredTransactions = transactionList.filter((transaction) => {
@@ -56,23 +58,38 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
     }
   }, [])
 
-  function saveTransactionToStorage(data: ISaveTransaction) {
+  const saveTransactionToStorage = useCallback(
+    (data: SaveTransaction) => {
+      const transactionList = getTransactionsFromStorage()
+
+      const transactionDataToInsert = {
+        id: crypto.randomUUID(),
+        description: data.description,
+        type: data.type,
+        price: data.price,
+        category: data.category,
+        createdAt: String(new Date()),
+      }
+
+      transactionList.push(transactionDataToInsert)
+
+      localStorage.setItem(TRANSACTIONS, JSON.stringify(transactionList))
+
+      setTransactions((prevState) => [...prevState, transactionDataToInsert])
+    },
+    [getTransactionsFromStorage],
+  )
+
+  function deleteTransactionFromStorage(idToDelete: string) {
     const transactionList = getTransactionsFromStorage()
 
-    const transactionDataToInsert = {
-      id: crypto.randomUUID(),
-      description: data.description,
-      type: data.type,
-      price: data.price,
-      category: data.category,
-      createdAt: String(new Date()),
-    }
+    const filteredTransactions = transactionList.filter(
+      (transaction) => transaction.id !== idToDelete,
+    )
 
-    transactionList.push(transactionDataToInsert)
+    localStorage.setItem(TRANSACTIONS, JSON.stringify(filteredTransactions))
 
-    localStorage.setItem(TRANSACTIONS, JSON.stringify(transactionList))
-
-    setTransactions((prevState) => [...prevState, transactionDataToInsert])
+    setTransactions(filteredTransactions)
   }
 
   const loadTransactions = useCallback(
@@ -80,17 +97,30 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
       const transactionList = getTransactionsFromStorage(query)
 
       setTransactions(transactionList)
+
+      return transactionList
     },
     [getTransactionsFromStorage, setTransactions],
   )
 
   useEffect(() => {
-    loadTransactions()
-  }, [loadTransactions])
+    const transactionList = loadTransactions()
+
+    if (!transactionList.length) {
+      transactionExampleList.forEach((transactionExample) =>
+        saveTransactionToStorage(transactionExample),
+      )
+    }
+  }, [loadTransactions, saveTransactionToStorage])
 
   return (
     <TransactionsContext.Provider
-      value={{ transactions, saveTransactionToStorage, loadTransactions }}
+      value={{
+        transactions,
+        saveTransactionToStorage,
+        deleteTransactionFromStorage,
+        loadTransactions,
+      }}
     >
       {children}
     </TransactionsContext.Provider>

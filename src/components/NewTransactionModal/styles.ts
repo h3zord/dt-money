@@ -32,6 +32,7 @@ export const Content = styled(Dialog.Content)`
       background: ${(props) => props.theme['gray-900']};
       color: ${(props) => props.theme['gray-300']};
       padding: 1rem;
+
       &::placeholder {
         color: ${(props) => props.theme['gray-500']};
       }
@@ -45,7 +46,7 @@ export const Content = styled(Dialog.Content)`
       font-weight: bold;
       padding: 0 1.25rem;
       border-radius: 6px;
-      margin-top: 1.25rem;
+      margin-top: 0.5rem;
       cursor: pointer;
 
       &:disabled {
@@ -123,4 +124,10 @@ export const TransactionTypeButton = styled(
       color: ${(props) => props.theme.white};
     }
   }
+`
+
+export const ErrorMessage = styled.div`
+  text-align: center;
+  color: ${(props) => props.theme['red-300']};
+  height: 20px;
 `

@@ -3,21 +3,31 @@ import * as z from 'zod'
 import { ArrowCircleDown, ArrowCircleUp, X } from 'phosphor-react'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useContext } from 'react'
+import { TransactionsContext } from '../../contexts/TransactionsContext'
 import {
   CloseButton,
   Content,
+  ErrorMessage,
   Overlay,
   TransactionType,
   TransactionTypeButton,
 } from './styles'
-import { useContext } from 'react'
-import { TransactionsContext } from '../../contexts/TransactionsContext'
 
 const newTransactionFormSchema = z.object({
-  description: z.string(),
-  price: z.number(),
-  category: z.string(),
+  price: z.number({ message: 'Digite um valor válido!' }),
   type: z.enum(['income', 'outcome']),
+  description: z
+    .string()
+    .transform(
+      (description) =>
+        description.charAt(0).toUpperCase() + description.slice(1),
+    ),
+  category: z
+    .string()
+    .transform(
+      (category) => category.charAt(0).toUpperCase() + category.slice(1),
+    ),
 })
 
 type NewTransactionFormInputs = z.infer<typeof newTransactionFormSchema>
@@ -30,7 +40,7 @@ export function NewTransactionModal() {
     register,
     handleSubmit,
     reset,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = useForm<NewTransactionFormInputs>({
     resolver: zodResolver(newTransactionFormSchema),
     defaultValues: {
@@ -68,7 +78,7 @@ export function NewTransactionModal() {
             {...register('description')}
           />
           <input
-            type="number"
+            type="text"
             placeholder="Preço"
             required
             {...register('price', { valueAsNumber: true })}
@@ -101,6 +111,10 @@ export function NewTransactionModal() {
               )
             }}
           />
+
+          <ErrorMessage>
+            {errors.price && 'Digite um preço válido!'}
+          </ErrorMessage>
 
           <button type="submit" disabled={isSubmitting}>
             Cadastrar
