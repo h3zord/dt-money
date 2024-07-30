@@ -12,7 +12,9 @@
 
 <strong>DT Money</strong> é uma aplicação para controle de gastos. A página principal apresenta três cards: entradas, saídas e saldo total. Todas as transações são exibidas em uma tabela, contendo descrição, valor, categoria e data do registro. O usuário pode manipular as transações, filtrando por descrição, excluindo ou adicionando novas transações ao preencher as informações no formulário.
 
-O projeto foi desenvolvido utilizando Vite (versão 5.3.4) e React (versão 18.3.1) em conjunto com TypeScript. A estilização foi feita com a biblioteca Styled Components. Outras bibliotecas e ferramentas utilizadas incluem: React Hook Form e Zod para lidar com formulários e validações, Radix UI, Framer Motion, Phosphor Icons, ESLint e Git para controle de versão.
+O projeto foi desenvolvido utilizando Vite (versão 5.3.4) e React (versão 18.3.1) em conjunto com TypeScript. Todas as transações cadastradas estão armazenadas no localstorage do navegador. A estilização foi feita com a biblioteca Styled Components. Outras bibliotecas e ferramentas utilizadas incluem: React Hook Form e Zod para lidar com formulários e validações, Radix UI, Framer Motion, Phosphor Icons, ESLint e Git para controle de versão.
+
+<strong>➜ Por questões visuais, a tabela de gastos já vem pré-preenchida caso não exista nenhuma transação cadastrada.</strong>
 
 <strong>➜ A responsividade deste projeto está em desenvolvimento.</strong>
 
