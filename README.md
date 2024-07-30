@@ -3,7 +3,7 @@
 <div align="center"><img src="public/logo-app.svg"/></div>
 
 <h2 align="center">
-  <a href="https://app-coffee-delivery.vercel.app" target="_blank">
+  <a href="https://app-dt-money.vercel.app" target="_blank">
     Teste o DT Money!
   </a>
 </h2>
