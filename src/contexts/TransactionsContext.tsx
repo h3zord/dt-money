@@ -1,3 +1,4 @@
+import { transactionExampleList } from '../utils/transactionExampleList'
 import {
   createContext,
   ReactNode,
@@ -5,7 +6,6 @@ import {
   useEffect,
   useState,
 } from 'react'
-import { transactionExampleList } from '../utils/transactionExampleList'
 
 interface SaveTransaction {
   description: string
@@ -21,6 +21,7 @@ interface Transaction extends SaveTransaction {
 
 interface TransactionsContextType {
   transactions: Transaction[]
+  getTransactionsFromStorage: (query?: string) => Transaction[]
   saveTransactionToStorage: (data: SaveTransaction) => void
   deleteTransactionFromStorage: (idToDelete: string) => void
   loadTransactions: (query?: string) => Transaction[]
@@ -35,10 +36,10 @@ export const TransactionsContext = createContext({} as TransactionsContextType)
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([])
 
-  const TRANSACTIONS = 'transactions'
+  const storageKey = 'transactions'
 
   const getTransactionsFromStorage = useCallback((query?: string) => {
-    const data = localStorage.getItem(TRANSACTIONS)
+    const data = localStorage.getItem(storageKey)
 
     if (!data) return []
 
@@ -73,7 +74,7 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
 
       transactionList.push(transactionDataToInsert)
 
-      localStorage.setItem(TRANSACTIONS, JSON.stringify(transactionList))
+      localStorage.setItem(storageKey, JSON.stringify(transactionList))
 
       setTransactions((prevState) => [...prevState, transactionDataToInsert])
     },
@@ -87,7 +88,7 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
       (transaction) => transaction.id !== idToDelete,
     )
 
-    localStorage.setItem(TRANSACTIONS, JSON.stringify(filteredTransactions))
+    localStorage.setItem(storageKey, JSON.stringify(filteredTransactions))
 
     setTransactions(filteredTransactions)
   }
@@ -117,6 +118,7 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
     <TransactionsContext.Provider
       value={{
         transactions,
+        getTransactionsFromStorage,
         saveTransactionToStorage,
         deleteTransactionFromStorage,
         loadTransactions,

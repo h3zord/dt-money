@@ -94,8 +94,13 @@ export const ResetButton = styled.button`
   gap: 0.5rem;
   cursor: pointer;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: ${(props) => props.theme['green-700']};
     transition: background-color 0.2s;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
   }
 `

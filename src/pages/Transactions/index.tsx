@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Header } from '../../components/Header'
 import { SearchForm } from '../../components/SearchForm'
 import { Summary } from '../../components/Summary'
@@ -16,8 +16,24 @@ import {
 } from './styles'
 
 export function Transactions() {
-  const { transactions, loadTransactions, deleteTransactionFromStorage } =
-    useContext(TransactionsContext)
+  const [isDisabled, setIsDisabled] = useState(false)
+
+  const {
+    transactions,
+    getTransactionsFromStorage,
+    loadTransactions,
+    deleteTransactionFromStorage,
+  } = useContext(TransactionsContext)
+
+  useEffect(() => {
+    const transactionsList = getTransactionsFromStorage()
+
+    if (!transactionsList.length) {
+      setIsDisabled(true)
+    } else {
+      setIsDisabled(false)
+    }
+  }, [transactions, getTransactionsFromStorage])
 
   const sortedTransactionsByDate = transactions?.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
@@ -76,11 +92,15 @@ export function Transactions() {
         ) : (
           <TransactionNotFound>
             <span>
+              <X size={28} />
               Nenhuma transação encontrada!
               <X size={28} />
             </span>
 
-            <ResetButton onClick={handleResetTransactions}>
+            <ResetButton
+              onClick={handleResetTransactions}
+              disabled={isDisabled}
+            >
               Reset <ArrowsClockwise size={24} />
             </ResetButton>
           </TransactionNotFound>
