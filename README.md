@@ -4,7 +4,7 @@
 
 <h2 align="center">
   <a href="https://app-dt-money.vercel.app" target="_blank">
-    Teste o DT Money!
+    Conheça o DT Money!
   </a>
 </h2>
 
