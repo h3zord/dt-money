@@ -49,7 +49,7 @@ O projeto foi desenvolvido utilizando Vite (versão 5.3.4) e React (versão 18.3
 git clone git@github.com:h3zord/dt-money.git
 ```
 
-### 2 - Entre no repositório
+### 2 - Entre no repositório:
 ```
 cd dt-money
 ```
