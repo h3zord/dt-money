@@ -8,6 +8,14 @@
   </a>
 </h2>
 
+## Demonstração
+
+<div align="center">
+
+</div>
+
+<br/>
+
 ## O que foi desenvolvido?
 
 <strong>DT Money</strong> é uma aplicação para controle de gastos. A página principal apresenta três cards: entradas, saídas e saldo total. Todas as transações são exibidas em uma tabela, contendo descrição, valor, categoria e data do registro. O usuário pode manipular as transações, filtrando por descrição, excluindo ou adicionando novas transações ao preencher as informações no formulário.
